@@ -1,3 +1,4 @@
+import javax.swing.text.Style;
 import java.util.*;
 //Messenger is main of program
 /*
@@ -41,9 +42,36 @@ public class messenger {
         return answer;
     }
     //num is valid or not
+    public static void dutyInGruop(account account,int indexGb){
+        account.gb.get(indexGb).ShowMessage();
+        System.out.println("1.send Messege");
+        System.out.println("2.change name of group");
+        int duty = input.nextInt();
+        switch (duty){
+            case 1 ->
+                    account.gb.get(indexGb).sendMessage();
+            case 2 -> {
+                System.out.println("enter new name:");
+                account.gb.get(indexGb).setNameGroup(input.nextLine());
+            }
+        }
+    }
+    public static void dutyInPv(account Inaccount,account PrivateChatPerson, int indexPv) {
+        //show all Messege
+        Inaccount.pvs.get(indexPv).ShowMessage();
+        //ask do you want to send message
+        System.out.println("1.send Messege");
+        System.out.println("2.close");
+        int duty = input.nextInt();
+        if (duty == 1) {
+            PrivateChatPerson.pvs.get(indexPv).setMessage(Inaccount.pvs.get(indexPv).sendMessage());
+        }else if(duty == 2){
+            return;
+        }
+    }
     public static boolean IsValid(Vector<account>accounts,String num){
-        for(int i = 0 ; i < accounts.size() ; i++){
-            if (accounts.elementAt(i).getNumber().equals(num))
+        for(account account: accounts){
+            if (account.getNumber().equals(num))
                 return true;
         }
         return false;
@@ -79,55 +107,47 @@ public class messenger {
                 String pass = input.nextLine();
                 //find account
                 Vector<String> find = findAccount(accounts,num,pass);
-                if (Boolean.parseBoolean(find.elementAt(0))) {
+                if (Boolean.parseBoolean(find.get(0))) {
                     boolean InAccount = true;
                     while(InAccount){
                         accounts.elementAt(Integer.parseInt(find.elementAt(1))).showAccount();
                         int answer = input.nextInt();
-                        switch (answer){
-                            case 1:
+                        switch (answer) {
+                            case 1 -> {
                                 //go to pv
                                 System.out.println("please enter the number of person:");
                                 String person = input.nextLine();
                                 person = input.nextLine();
-                                Vector<String> PV = findAccount(accounts,person);
+                                Vector<String> PV = findAccount(accounts, person);
                                 Vector<String> existPv = accounts.elementAt(Integer.parseInt(find.get(1))).findPv(person);
-                                if (Boolean.parseBoolean(find.get(0)) && Boolean.parseBoolean(existPv.get(0))){
+                                if (Boolean.parseBoolean(find.get(0)) && Boolean.parseBoolean(existPv.get(0))) {
                                     //show message
-                                    accounts.elementAt(Integer.parseInt(find.elementAt(1))).
-                                            pvs.elementAt(Integer.parseInt(existPv.elementAt(1))).ShowMessage();
-                                    //ask do you want to send message
-                                    System.out.println("Do you want to send message ? (y/n)");
-                                    Character ans = input.next().charAt(0);
-                                    ans = Character.toLowerCase(ans);
-                                    if(ans.equals('y')){
-                                        accounts.elementAt(Integer.parseInt(PV.elementAt(1))).
-                                                pvs.elementAt(Integer.parseInt(existPv.elementAt(1))).setMessage(
-                                                        accounts.elementAt(Integer.parseInt(find.elementAt(1))).
-                                                                pvs.elementAt(Integer.parseInt(existPv.elementAt(1))).sendMessage());
-                                    }
-                                }else
+                                    dutyInPv(accounts.get(Integer.parseInt(find.get(1))),accounts.get(Integer.parseInt(existPv.get(1))),Integer.parseInt(existPv.get(1)));
+                                } else
                                     System.out.println("this number is incorrect or this pv is not exist, please test again");
-                                break;
-                            case 2:
+                            }
+                            case 2 -> {
                                 //go to group
-                                break;
-                            case 3:
-                                //make group
-                                accounts.get(Integer.parseInt(find.get(1))).makeGroup(accounts);
-                                break;
-                            case 4:
-                                //make a private chat
-                                accounts.elementAt(Integer.parseInt(find.elementAt(1))).makePv(accounts);
-                                break;
-                            case 5:
-                                //show proifle and you can change your date
-                                accounts.elementAt(Integer.parseInt(find.elementAt(1))).showProfile();
-                                break;
-                            case 6:
-                                //close the account
-                                InAccount = false;
-                                break;
+                                System.out.println("enter name of group:");
+                                String nameGb = input.next();
+                                Vector<String> IsValid = accounts.get(Integer.parseInt(find.get(1))).findGb(nameGb);
+                                if (Boolean.parseBoolean(IsValid.get(0))) {
+                                    dutyInGruop(accounts.get(Integer.parseInt(find.get(1))), Integer.parseInt(IsValid.get(1)));
+                                } else
+                                    System.out.println("group not valid !!,choose other");
+                            }
+                            case 3 ->
+                                    //make group
+                                    accounts.get(Integer.parseInt(find.get(1))).makeGroup(accounts);
+                            case 4 ->
+                                    //make a private chat
+                                    accounts.elementAt(Integer.parseInt(find.elementAt(1))).makePv(accounts);
+                            case 5 ->
+                                    //show proifle and you can change your date
+                                    accounts.elementAt(Integer.parseInt(find.elementAt(1))).showProfile();
+                            case 6 ->
+                                    //close the account
+                                    InAccount = false;
                         }
                     }
                 } else System.out.println("your data is incorrect");

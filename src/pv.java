@@ -41,11 +41,10 @@ public class pv {
             System.out.println("this chat is empty");
             return;
         }
-        for (int i = 0; i < message.size()  ; i++){
-            if (message.get(i) == null || message.get(i).equals("-1"))
-                i++;
-            else
-                System.out.println("=>" + message.elementAt(i));
+        for (String mss: message){
+            if (mss != null && !mss.equals("-1")) {
+                System.out.println("=>" + mss);
+            }
         }
     }
 }

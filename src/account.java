@@ -41,16 +41,10 @@ public class account{
         System.out.println("password: " + password);
         System.out.println("which one change? (name/number/password)");
         String answer = input.nextLine();
-        switch (answer){
-            case "name":
-                setName();
-                break;
-            case "number":
-                setNumber();
-                break;
-            case "password":
-                setPassword();
-                break;
+        switch (answer) {
+            case "name" -> setName();
+            case "number" -> setNumber();
+            case "password" -> setPassword();
         }
     }
     public void showPv(){
@@ -68,14 +62,14 @@ public class account{
     }
     public void makeGroup(Vector<account> member){
         //person should slecet a special name for gb
-        Boolean exist;
+        boolean exist;
         String nameGb;
         do{
             exist = false;
             System.out.println("enter name of group:");
             nameGb = input.nextLine();
-            for (int i = 0; i < gb.size(); i++)
-                if (gb.get(i).getNameGroup() == nameGb) {
+            for (groupChat members : gb)
+                if (Objects.equals(members.getNameGroup(), nameGb)) {
                     exist = true;
                     System.out.println("this name is exist,please choose again");
                 }
@@ -96,6 +90,18 @@ public class account{
                 member.elementAt(i).pvs.add(person);
             }
         }
+    }
+    public Vector<String> findGb(String nameGb){
+        Vector<String> answer = new Vector<String>();
+        int index = 0;
+        for ( groupChat groupChat : gb){
+            if (groupChat.getNameGroup().equals(nameGb)){
+                answer.add("true");
+                answer.add(Integer.toString(index));
+            }
+            index++;
+        }
+        return answer;
     }
     public Vector<String> findPv(String num){
         Vector<String> answer = new Vector<String>();

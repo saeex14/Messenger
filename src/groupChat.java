@@ -17,17 +17,19 @@ public class groupChat {
 
         System.out.println("How many member do you have?");
         int n = input.nextInt();
-        for (int i = 0; i < n ; i++){
-            System.out.println("enter number of member:");
-            String num = input.nextLine();
+        for (int i = 0; i < n - 1 ; i++){
+            System.out.print("enter number of member:");
+            String num = input.next();
             Boolean exist = false;
             //if num exist add,nor add next num
-            for (int j = 0 ; j < member.size(); j++){
-                if (member.get(i).getNumber() == num)
-                   exist = true;
+            for (account account : member) {
+                if (Objects.equals(account.getNumber(), num)) {
+                    exist = true;
+                    break;
+                }
             }
             if(exist)
-            numbers.add(num);
+              numbers.add(num);
             else
                 i--;
         }
@@ -47,11 +49,11 @@ public class groupChat {
         NewMessage = false;
 //        System.out.println("how many messages do you want to see? ");
 //        int n = input.nextInt();
-        for (int i = 0;  i != message.size() ; i++){
-            if (message.elementAt(i) == null || message.get(i).equals("-1"))
-                i++;
+        for (String mss: message){
+            if (mss == null || mss.equals("-1"))
+                continue;
             else
-                System.out.println(message.elementAt(i));
+                System.out.println("=> " + mss);
         }
     }
     public void sendMessage(){
