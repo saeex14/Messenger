@@ -20,7 +20,7 @@ public class groupChat {
         for (int i = 0; i < n - 1 ; i++){
             System.out.print("enter number of member:");
             String num = input.next();
-            Boolean exist = false;
+            boolean exist = false;
             //if num exist add,nor add next num
             for (account account : member) {
                 if (Objects.equals(account.getNumber(), num)) {
@@ -38,6 +38,7 @@ public class groupChat {
     //getter
     public String getNameGroup(){return nameGroup;}
     public String getNumber(int i ){return numbers.elementAt(i);}
+    public Vector<String> getMessege(){return message;}
     public Vector<String> getNumbers(){return numbers;}
     public Boolean getNewMessage(){return NewMessage;}
     //options: show and send message to another member
@@ -49,14 +50,17 @@ public class groupChat {
         NewMessage = false;
 //        System.out.println("how many messages do you want to see? ");
 //        int n = input.nextInt();
-        for (String mss: message){
-            if (mss == null || mss.equals("-1"))
-                continue;
-            else
-                System.out.println("=> " + mss);
-        }
+        if (message.isEmpty())
+            System.out.println("this Group is empty");
+        else
+            for (String mss: message){
+                if (mss != null && !mss.equals("-1")) {
+                    System.out.println("=> " + mss);
+                }
+            }
     }
     public void sendMessage(){
+        NewMessage = true;
         String temp = "";
         while (!temp.equals("-1")){
 

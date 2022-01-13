@@ -48,16 +48,18 @@ public class account{
         }
     }
     public void showPv(){
-        for (int i = 0 ; i < pvs.size(); i++){
+        for (int i = 0 ; i < pvs.size(); i++)
             if (pvs.get(i).getNewMessege()) {
-                System.out.println(ANSI_GREEN + pvs.elementAt(i).getNumber() + ": " +ANSI_RESET);
-            }else
+                System.out.println(ANSI_GREEN + pvs.elementAt(i).getNumber() + ": " + ANSI_RESET);
+            } else
                 System.out.println(pvs.elementAt(i).getNumber() + ": ");
-        }
     }
     public void showGroups(){
-        for (int i = 0 ; i < gb.size(); i++){
-            System.out.println(gb.elementAt(i).getNameGroup());
+        for (groupChat groupChat : gb) {
+            if (groupChat.getNewMessage())
+                System.out.println(ANSI_GREEN + groupChat.getNameGroup() + ANSI_RESET);
+            else
+                System.out.println(groupChat.getNameGroup());
         }
     }
     public void makeGroup(Vector<account> member){
@@ -78,6 +80,12 @@ public class account{
         groupChat temp = new groupChat(member,this.number,nameGb);
         //now we should add gb to other person
         gb.add(temp);
+        for (String num:temp.getNumbers()) {
+            for (account account : member) {
+                if (account.getNumber().equals(num))
+                    account.gb.add(temp);
+            }
+        }
     }
     public void makePv(Vector<account> member){
         System.out.println("please enter number person:");

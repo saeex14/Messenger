@@ -48,11 +48,24 @@ public class messenger {
         System.out.println("2.change name of group");
         int duty = input.nextInt();
         switch (duty){
-            case 1 ->
-                    account.gb.get(indexGb).sendMessage();
+            case 1 -> {
+                account.gb.get(indexGb).sendMessage();
+                for (String num:account.gb.get(indexGb).getNumbers()){
+                    for (account member:accounts){
+                        if (member.getNumber().equals(num)){
+                            for (groupChat group:member.gb){
+                                if (group.getNameGroup().equals(account.gb.get(indexGb).getNameGroup())){
+                                    group.UpdateMesseger(account.gb.get(indexGb).getMessege());
+                                }
+                            }
+                        }
+                    }
+                }
+            }
             case 2 -> {
                 System.out.println("enter new name:");
-                account.gb.get(indexGb).setNameGroup(input.nextLine());
+                account.gb.get(indexGb).setNameGroup(input.next());
+
             }
         }
     }
@@ -77,6 +90,8 @@ public class messenger {
     //change font's color in terminal for show the new message or not
     public static final String ANSI_RED = "\u001B[31m";
     public static final String ANSI_BLACK  = "\u001B[30m";
+    //all accounts put in this Vector
+    public static Vector<account> accounts = new Vector<account>();
     //showing the menu and return choice
     public static int Menu(){
         System.out.println("1.sign in");
@@ -86,8 +101,6 @@ public class messenger {
     }
     //running the program and make account
     public static void main(String[] args) {
-        //all accounts put in this Vector
-        Vector<account> accounts = new Vector<account>();
         //this is only for test
         for (int i = 0; i < 10; i++) {
             account temp = new account("a", Integer.toString(i), Integer.toString(i));
@@ -156,7 +169,6 @@ public class messenger {
                 if(!IsValid(accounts,make.getNumber()))
                      accounts.add(make);
                 else
-                    
                      choose = Menu();
             }
             if (choose == 3) {
