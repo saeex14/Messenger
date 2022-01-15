@@ -46,6 +46,7 @@ public class messenger {
         account.gb.get(indexGb).ShowMessage();
         System.out.println("1.send Messege");
         System.out.println("2.change name of group");
+        System.out.println("3.close");
         int duty = input.nextInt();
         switch (duty){
             case 1 -> {
@@ -64,8 +65,19 @@ public class messenger {
             }
             case 2 -> {
                 System.out.println("enter new name:");
-                account.gb.get(indexGb).setNameGroup(input.next());
-
+                //set the new name for Group Chat
+                String NewName = input.nextLine();
+                for (String num:account.gb.get(indexGb).getNumbers()){
+                    for (account member:accounts){
+                        if (member.getNumber().equals(num)){
+                            for (groupChat group:member.gb){
+                                if (group.getNameGroup().equals(account.gb.get(indexGb).getNameGroup())){
+                                    group.setNameGroup(NewName);
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }

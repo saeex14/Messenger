@@ -79,7 +79,6 @@ public class account{
         //make a group in groupChat we will get numbers of member group
         groupChat temp = new groupChat(member,this.number,nameGb);
         //now we should add gb to other person
-        gb.add(temp);
         for (String num:temp.getNumbers()) {
             for (account account : member) {
                 if (account.getNumber().equals(num))
