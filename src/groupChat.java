@@ -1,5 +1,7 @@
 import java.util.*;
 public class groupChat {
+    public static final String ANSI_RESET  = "\u001B[0m";
+    public static final String ANSI_RED    = "\u001B[31m";
     //obj
     Scanner input = new Scanner(System.in);
     private String nameGroup;
@@ -35,9 +37,10 @@ public class groupChat {
         }
     }
     public void setNameGroup(String name){nameGroup = name;}
+    public void setNewMessage(boolean bool){this.NewMessage = bool;}
+    public void setNewNumber(String num ){ this.numbers.add(num);}
     //getter
     public String getNameGroup(){return nameGroup;}
-    public String getNumber(int i ){return numbers.elementAt(i);}
     public Vector<String> getMessege(){return message;}
     public Vector<String> getNumbers(){return numbers;}
     public Boolean getNewMessage(){return NewMessage;}
@@ -51,7 +54,7 @@ public class groupChat {
 //        System.out.println("how many messages do you want to see? ");
 //        int n = input.nextInt();
         if (message.isEmpty())
-            System.out.println("this Group is empty");
+            System.out.println(ANSI_RED + "this Group is empty" + ANSI_RESET);
         else
             for (String mss: message){
                 if (mss != null && !mss.equals("-1")) {
@@ -63,7 +66,6 @@ public class groupChat {
         NewMessage = true;
         String temp = "";
         while (!temp.equals("-1")){
-
             temp = input.nextLine();
             message.add(temp);
         }

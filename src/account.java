@@ -4,7 +4,8 @@ public class account{
     //obj
     Scanner input = new Scanner(System.in);
     public static final String ANSI_RESET  = "\u001B[0m";
-    public static  String ANSI_GREEN  = "\u001B[32m";
+    public static final String ANSI_GREEN  = "\u001B[32m";
+    public static final String ANSI_RED    = "\u001B[31m";
     private String number;
     private String name;
     private String password;
@@ -21,9 +22,26 @@ public class account{
         number = num;
         password = pass;
     }
+    //getter
+    public String getNumber(){return  number;}
+    public String getName(){return name;}
+    public String getPassword(){return password;}
+    //setter
+    public void setNumber(){
+        System.out.println("enter your number:");
+        this.number = input.nextLine();
+    }
+    public void setName(){
+        System.out.println("enter your name:");
+        this.name = input.nextLine();
+    }
+    public void setPassword(){
+        System.out.println("enter your password:");
+        this.password = input.nextLine();
+    }
     //option : make pv, group chats
     public void showAccount(){
-        System.out.println("Hi " + name + "  (only enter the number of duty)");
+        System.out.println("Hi " + name + " (only enter the number of duty)");
         System.out.println("Groups:");
         showGroups();
         System.out.println("Pvs:");
@@ -66,6 +84,7 @@ public class account{
         //person should slecet a special name for gb
         boolean exist;
         String nameGb;
+        //not same name
         do{
             exist = false;
             System.out.println("enter name of group:");
@@ -73,7 +92,7 @@ public class account{
             for (groupChat members : gb)
                 if (Objects.equals(members.getNameGroup(), nameGb)) {
                     exist = true;
-                    System.out.println("this name is exist,please choose again");
+                    System.out.println(ANSI_RED + "this name is exist,please choose again" + ANSI_RESET);
                 }
         }while (exist);
         //make a group in groupChat we will get numbers of member group
@@ -87,16 +106,27 @@ public class account{
         }
     }
     public void makePv(Vector<account> member){
+        //show this pv exist or not
         System.out.println("please enter number person:");
         String num = input.nextLine();
-        pv temp = new pv(num);
-        pvs.add(temp);
-        for (int i = 0; i < member.size() - 1; i++){
-            if (member.elementAt(i).getNumber().equals(num)){
-                pv person = new pv(number);
-                member.elementAt(i).pvs.add(person);
+        boolean exist = false;
+        for (pv test:pvs){
+            if (test.getNumber().equals(num)){
+                exist = true;
             }
         }
+        if (!exist) {
+            pv temp = new pv(num);
+            pvs.add(temp);
+            //add pv in person
+            for (int i = 0; i < member.size() - 1; i++) {
+                if (member.elementAt(i).getNumber().equals(num)) {
+                    pv person = new pv(number);
+                    member.elementAt(i).pvs.add(person);
+                }
+            }
+        }else
+            System.out.println(ANSI_RED + "this chat existed" + ANSI_RESET);
     }
     public Vector<String> findGb(String nameGb){
         Vector<String> answer = new Vector<String>();
@@ -122,22 +152,5 @@ public class account{
         answer.add("false");
         answer.add(Integer.toString(0));
         return answer;
-    }
-    //getter
-    public String getNumber(){return  number;}
-    public String getName(){return name;}
-    public String getPassword(){return password;}
-    //setter
-    public void setNumber(){
-        System.out.println("enter your number:");
-        this.number = input.nextLine();
-    }
-    public void setName(){
-        System.out.println("enter your name:");
-        this.name = input.nextLine();
-    }
-    public void setPassword(){
-        System.out.println("enter your password:");
-        this.password = input.nextLine();
     }
 }
