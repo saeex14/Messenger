@@ -57,11 +57,10 @@ public class account{
         System.out.println("name: " + name);
         System.out.println("number: " + number);
         System.out.println("password: " + password);
-        System.out.println("which one change? (name/number/password)");
+        System.out.println("which one change? (name/number/password, you can't change your number)");
         String answer = input.nextLine();
         switch (answer) {
             case "name" -> setName();
-            case "number" -> setNumber();
             case "password" -> setPassword();
         }
     }
@@ -115,7 +114,13 @@ public class account{
                 exist = true;
             }
         }
-        if (!exist) {
+        //check num is existed
+        for (account temp:member){
+            if (temp.getNumber().equals(num)) {
+                exist = true && !exist;
+            }
+        }
+        if (exist) {
             pv temp = new pv(num);
             pvs.add(temp);
             //add pv in person
@@ -126,7 +131,7 @@ public class account{
                 }
             }
         }else
-            System.out.println(ANSI_RED + "this chat existed" + ANSI_RESET);
+            System.out.println(ANSI_RED + "this chat existed or account not existed" + ANSI_RESET);
     }
     public Vector<String> findGb(String nameGb){
         Vector<String> answer = new Vector<String>();
@@ -138,6 +143,10 @@ public class account{
             }
             index++;
         }
+        if (!answer.isEmpty())
+           return answer;
+        else
+            answer.add("false");
         return answer;
     }
     public Vector<String> findPv(String num){
