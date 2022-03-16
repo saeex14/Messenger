@@ -14,24 +14,37 @@ public class pv {
     }
     //getter
     public String getNumber(){ return number;}
+    public String getMessage(int i){
+       if (message.size() >= i)
+         return message.get(i);
+       return null;
+    }
     public Boolean getNewMessege(){return NewMessege;}
     //setter
-    public void setNumber(){
-        System.out.println("enter num of person:");
-        number = input.nextLine();
-    }
     public void setMessage(Vector<String> update){
         message = update;
         NewMessege = true;
     }
     //options: send and show message to person
-    public Vector<String> sendMessage(){
+    public void addMessage(String mss){
+        NewMessege = true;
+        this.message.add(mss);}
+    public Vector<String> sendMessage(String Myname){
         String temp = "";
         while (!temp.equals("-1")){
             temp = input.nextLine();
             if(!Objects.equals(temp, "-1"))
-               message.add(temp);
+                message.add(Myname +": "+ temp);
         }
+        return message;
+    }
+    public Vector<String> changeMessege(String Myname){
+        System.out.println("which line do you want to change ?");
+        int n = input.nextInt();
+        System.out.print("enter changed:");
+        String temp = input.nextLine();
+        temp = input.nextLine();
+        message.set(n - 1 ,Myname+": "+temp) ;
         return message;
     }
     public void ShowMessage(){
@@ -40,10 +53,12 @@ public class pv {
             System.out.println(ANSI_RED + "this chat is empty" + ANSI_RESET);
             return;
         }
+        int i = 1 ;
         for (String mss: message){
             if (mss != null && !mss.equals("-1")) {
-                System.out.println(ANSI_RED + "=>" +ANSI_RESET + mss);
+                System.out.println(ANSI_RED + i + ". " + ANSI_RESET  + mss);
             }
+            i++;
         }
     }
 }

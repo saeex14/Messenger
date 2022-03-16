@@ -16,7 +16,6 @@ public class groupChat {
     }
     //setter
     public void setNumbers(Vector<account> member){
-
         System.out.println("How many member do you have?");
         int n = input.nextInt();
         for (int i = 0; i < n - 1 ; i++){
@@ -31,43 +30,61 @@ public class groupChat {
                 }
             }
             if(exist)
-              numbers.add(num);
+                numbers.add(num);
             else
                 i--;
         }
     }
     public void setNameGroup(String name){nameGroup = name;}
-    public void setNewMessage(boolean bool){this.NewMessage = bool;}
-    public void setNewNumber(String num ){ this.numbers.add(num);}
     //getter
     public String getNameGroup(){return nameGroup;}
-    public Vector<String> getMessege(){return message;}
+    public Vector<String> getMessage(){return message;}
     public Vector<String> getNumbers(){return numbers;}
     public Boolean getNewMessage(){return NewMessage;}
+    public String getMessage(int i ){return message.get(i);}
+
     //options: show and send message to another member
+    //when you want update message
     public void UpdateMesseger(Vector<String>temp){
         NewMessage  = true;
         message = temp;
     }
+    //when you want only add one message
+    public void addMessage(String mss){
+        NewMessage = true;
+        this.message.add(mss);
+    }
+    //change the message that you will select
+    public void ChangeMessage(String Myname){
+        System.out.println("which line do you want ot change?");
+        int n = input.nextInt();
+        System.out.println("enter changed:");
+        String temp = input.nextLine();
+        temp = input.nextLine();
+        message.set(n - 1,Myname + ": " + temp);
+    }
+    //show all message
     public void ShowMessage(){
         NewMessage = false;
-//        System.out.println("how many messages do you want to see? ");
-//        int n = input.nextInt();
+        int i = 1 ;
         if (message.isEmpty())
             System.out.println(ANSI_RED + "this Group is empty" + ANSI_RESET);
         else
             for (String mss: message){
                 if (mss != null && !mss.equals("-1")) {
-                    System.out.println("=> " + mss);
+                    System.out.println(ANSI_RED + i + ". " + ANSI_RESET + mss);
                 }
+                i++;
             }
     }
-    public void sendMessage(){
+    //sending message
+    public void sendMessage(String Myname){
         NewMessage = true;
         String temp = "";
         while (!temp.equals("-1")){
             temp = input.nextLine();
-            message.add(temp);
+            if(!Objects.equals(temp, "-1"))
+                message.add(Myname +": "+ temp);
         }
     }
 }

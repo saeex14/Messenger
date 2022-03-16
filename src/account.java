@@ -22,10 +22,6 @@ public class account{
         number = num;
         password = pass;
     }
-    //getter
-    public String getNumber(){return  number;}
-    public String getName(){return name;}
-    public String getPassword(){return password;}
     //setter
     public void setNumber(){
         System.out.println("enter your number:");
@@ -39,6 +35,11 @@ public class account{
         System.out.println("enter your password:");
         this.password = input.nextLine();
     }
+    //getter
+    public String getNumber(){return  number;}
+    public String getName(){return name;}
+    public String getPassword(){return password;}
+
     //option : make pv, group chats
     public void showAccount(){
         System.out.println("Hi " + name + " (only enter the number of duty)");
@@ -80,7 +81,7 @@ public class account{
         }
     }
     public void makeGroup(Vector<account> member){
-        //person should slecet a special name for gb
+        //person should select a special name for gb
         boolean exist;
         String nameGb;
         //not same name
@@ -88,6 +89,7 @@ public class account{
             exist = false;
             System.out.println("enter name of group:");
             nameGb = input.nextLine();
+            nameGb = nameGb.strip();
             for (groupChat members : gb)
                 if (Objects.equals(members.getNameGroup(), nameGb)) {
                     exist = true;
@@ -133,6 +135,33 @@ public class account{
         }else
             System.out.println(ANSI_RED + "this chat existed or account not existed" + ANSI_RESET);
     }
+    public void makePv(Vector<account> member , String num){
+        //show this pv exist or not
+        boolean exist = false;
+        for (pv test:pvs){
+            if (test.getNumber().equals(num)){
+                exist = true;
+            }
+        }
+        //check num is existed
+        for (account temp:member){
+            if (temp.getNumber().equals(num)) {
+                exist = true && !exist;
+            }
+        }
+        if (exist) {
+            pv temp = new pv(num);
+            pvs.add(temp);
+            //add pv in person
+            for (int i = 0; i < member.size() - 1; i++) {
+                if (member.elementAt(i).getNumber().equals(num)) {
+                    pv person = new pv(number);
+                    member.elementAt(i).pvs.add(person);
+                }
+            }
+        }else
+            System.out.println(ANSI_RED + "this chat existed or account not existed" + ANSI_RESET);
+    }
     public Vector<String> findGb(String nameGb){
         Vector<String> answer = new Vector<String>();
         int index = 0;
@@ -144,7 +173,7 @@ public class account{
             index++;
         }
         if (!answer.isEmpty())
-           return answer;
+            return answer;
         else
             answer.add("false");
         return answer;
@@ -161,5 +190,57 @@ public class account{
         answer.add("false");
         answer.add(Integer.toString(0));
         return answer;
+    }
+    public void forwardToPv(String mss,Vector<account> member){
+        System.out.println("enter number:");
+        String test = input.nextLine();
+        Vector<String> IsValid = findPv(test);
+        if (Boolean.parseBoolean(IsValid.get(0))){
+            pvs.get(Integer.parseInt(IsValid.get(1))).addMessage("forward from " + mss);
+        }else{
+            makePv(member , test);
+            Vector<String> temp = findPv(test);
+            pvs.get(Integer.parseInt(temp.get(1))).addMessage("forward from " + mss);
+        }
+        for (account temp : member){
+          if (temp.getNumber().equals(test)){
+              for (pv find:temp.pvs){
+                  if (find.getNumber().equals(this.number)){
+                      find.addMessage("forward from " + mss);
+                  }
+              }
+          }
+        }
+
+
+    }
+    public void forwardToGroup(String mss,Vector<account> member){
+        System.out.println("enter name of group:");
+        String name = input.nextLine();
+        boolean exist = false;
+        int index = 0;
+        for(groupChat temp:gb){
+            if (temp.getNameGroup().equals(name)){
+                exist = true;
+                break;
+            }
+            index++;
+        }
+        if (exist){
+          gb.get(index).addMessage("forward from " + mss);
+          for (String num:gb.get(index).getNumbers()){
+              for (account temp:member){
+                  if (temp.getNumber().equals(num) && !temp.getNumber().equals(this.number)){
+                      for (groupChat ignored :temp.gb){
+                          if (ignored.getNameGroup().equals(name)){
+                              ignored.UpdateMesseger(gb.get(index).getMessage());
+                          }
+                      }
+                  }
+              }
+          }
+        }else{
+            System.out.println(ANSI_RED + "this group not exited,please first make that " + ANSI_RESET);
+        }
     }
 }
